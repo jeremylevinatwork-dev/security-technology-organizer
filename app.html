@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en" data-build="stoapp-20261103-2359">
+<html lang="en" data-build="stoapp-20261104-0042">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
@@ -95,6 +95,8 @@ input:focus,select:focus,textarea:focus{outline:none;border-color:var(--gold)}
 .gate-card input:focus{border-color:var(--navy)}
 .gate-note{font-size:13.5px;color:var(--mut);line-height:1.55;margin-top:14px;text-align:left}
 .btn.big{padding:15px;font-size:16.5px;border-radius:12px}
+.gate-vid{margin-top:16px}
+.gate-vid video{width:100%;display:block;border-radius:14px;border:2px solid var(--gold);background:#081627;aspect-ratio:16/9}
 .gate-foot{color:#9FB4CE;font-size:13px;margin-top:18px;letter-spacing:.3px}
 </style>
 </head>
@@ -226,6 +228,7 @@ function viewGate(){
     + '<div class="gate-title">Security Technology Organizer</div>'
     + '<div class="gate-sub">Fobs · Radios · Cameras · Inspections · Yearly Audit</div>'
     + '<div class="gate-tabs"><button class="' + (join?'on':'') + '" onclick="gateSet(\'join\')">Start free trial</button><button class="' + (!join?'on':'') + '" onclick="gateSet(\'login\')">Sign in</button></div>'
+    + '<div class="gate-vid"><video controls preload="none" poster="commercial-poster.jpg" playsinline src="commercial.mp4"></video></div>'
     + '<div class="' + (join?'':'hidden') + '">'
     + '<p class="gate-note">Enter your company name and the Organizer becomes <b>your</b> system — your name on every screen. ' + TRIAL_DAYS + '-day free trial, basic features included, no card required.</p>'
     + '<label>Company name</label><input id="j-co" type="text" placeholder="e.g. Harbor Lights Resort" autocomplete="organization">'

@@ -1,0 +1,366 @@
+<!DOCTYPE html>
+<html lang="en" data-build="stoapp-20261103-2335">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Security Technology Organizer</title>
+<meta name="description" content="Security Technology Organizer — the tracking system for hotel and commercial security teams. Emergency fobs, radios, cameras, inspections and the yearly audit, in one place.">
+<script>
+/* Self-update guard: reload once onto the newest build (keys stob/stor). */
+(function(){try{
+  if(sessionStorage.getItem('stor'))return;
+  fetch(location.href,{cache:'no-store'}).then(function(r){return r.text()}).then(function(t){
+    var m=t.match(/data-build="([^"]+)"/);
+    var mine=(document.documentElement.getAttribute('data-build')||'');
+    if(m&&m[1]!==mine){sessionStorage.setItem('stob',m[1]);sessionStorage.setItem('stor','1');location.reload();}
+  }).catch(function(){});
+}catch(e){}})();
+</script>
+<style>
+:root{--navy:#0F2440;--navy2:#16345C;--gold:#C9A227;--gold2:#F5C542;--ink:#1B2430;--mut:#64748B;--line:#E2E8F0;--bg:#F4F6FA;--card:#FFFFFF;--red:#B91C1C;--grn:#15803D}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;background:var(--bg);color:var(--ink);-webkit-font-smoothing:antialiased}
+button{font:inherit;cursor:pointer}
+input,select,textarea{font:inherit}
+.wrap{max-width:560px;margin:0 auto;padding:0 16px 40px}
+.hero{background:linear-gradient(160deg,var(--navy) 0%,var(--navy2) 100%);color:#fff;padding:34px 20px 26px;text-align:center;border-bottom:4px solid var(--gold)}
+.hero img{width:92px;height:92px;object-fit:cover;border-radius:20px;box-shadow:0 8px 24px rgba(0,0,0,.35)}
+.hero h1{font-size:24px;letter-spacing:.4px;margin-top:14px}
+.hero h1 span{color:var(--gold2)}
+.hero p{color:#CBD8EA;font-size:14px;margin-top:6px;line-height:1.45}
+.card{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:18px;margin-top:16px;box-shadow:0 1px 3px rgba(15,36,64,.05)}
+.card h2{font-size:17px;color:var(--navy);margin-bottom:4px}
+.card p.sub{color:var(--mut);font-size:13px;line-height:1.5;margin-bottom:10px}
+label{display:block;font-size:12.5px;font-weight:600;color:var(--navy);margin:12px 0 5px}
+input[type=text],input[type=email],input[type=password],select,textarea{width:100%;padding:11px 12px;border:1.5px solid var(--line);border-radius:10px;background:#fff;color:var(--ink)}
+input:focus,select:focus,textarea:focus{outline:none;border-color:var(--gold)}
+.btn{display:inline-block;width:100%;padding:13px 16px;border:none;border-radius:11px;background:var(--navy);color:#fff;font-weight:700;font-size:15px;margin-top:14px}
+.btn.gold{background:linear-gradient(180deg,var(--gold2),var(--gold));color:var(--navy)}
+.btn.ghost{background:#fff;border:1.5px solid var(--line);color:var(--navy)}
+.btn.danger{background:var(--red);color:#fff}
+.btn.sm{width:auto;padding:8px 13px;font-size:13px;margin-top:0;border-radius:9px}
+.err{display:none;background:#FEF2F2;border:1px solid #FECACA;color:var(--red);border-radius:10px;padding:10px 12px;font-size:13.5px;margin-top:12px;line-height:1.45}
+.link{display:inline-block;margin-top:14px;color:var(--navy2);font-size:14px;font-weight:600;cursor:pointer;text-decoration:underline}
+.topbar{position:sticky;top:0;z-index:20;background:var(--navy);color:#fff;border-bottom:3px solid var(--gold)}
+.topbar .in{max-width:560px;margin:0 auto;padding:12px 16px;display:flex;align-items:center;gap:11px}
+.topbar img{width:38px;height:38px;border-radius:9px;object-fit:cover}
+.topbar .co{font-weight:800;font-size:16.5px;line-height:1.15;flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.topbar .by{font-size:10.5px;color:#B9C9DE;font-weight:600;letter-spacing:.4px;text-transform:uppercase}
+.pill{display:inline-block;padding:4px 10px;border-radius:999px;font-size:11.5px;font-weight:700;background:#FEF3C7;color:#92400E;border:1px solid #FDE68A;white-space:nowrap}
+.pill.ok{background:#DCFCE7;color:#166534;border-color:#BBF7D0}
+.pill.over{background:#FEE2E2;color:#991B1B;border-color:#FECACA}
+.tabs{display:flex;gap:8px;margin-top:16px}
+.tabs button{flex:1;padding:10px 0;border-radius:10px;border:1.5px solid var(--line);background:#fff;color:var(--navy);font-weight:700;font-size:14px}
+.tabs button.on{background:var(--navy);color:#fff;border-color:var(--navy)}
+.tiles{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:14px}
+.tile{background:#fff;border:1px solid var(--line);border-radius:12px;padding:14px}
+.tile .n{font-size:26px;font-weight:800;color:var(--navy)}
+.tile .t{font-size:12px;color:var(--mut);font-weight:600;margin-top:2px}
+.mod{display:flex;align-items:center;gap:12px;width:100%;text-align:left;background:#fff;border:1px solid var(--line);border-radius:12px;padding:15px;margin-top:10px}
+.mod .ic{font-size:24px}
+.mod .mt{font-weight:700;color:var(--navy);font-size:15px}
+.mod .ms{font-size:12.5px;color:var(--mut);margin-top:1px}
+.mod .tag{margin-left:auto;font-size:11px;font-weight:800;padding:4px 9px;border-radius:999px;background:#EEF2FF;color:#3730A3;white-space:nowrap}
+.mod .tag.live{background:#DCFCE7;color:#166534}
+.fob{border:1px solid var(--line);border-radius:12px;padding:13px 14px;margin-top:10px;background:#fff}
+.fob .fid{font-weight:800;color:var(--navy);font-size:15px}
+.fob .fm{font-size:12.5px;color:var(--mut);margin-top:2px;line-height:1.5}
+.badge{display:inline-block;font-size:11px;font-weight:800;padding:3px 8px;border-radius:999px;background:#E0E7FF;color:#3730A3}
+.badge.broken{background:#FEE2E2;color:#991B1B}
+.badge.okb{background:#DCFCE7;color:#166534}
+.badge.chg{background:#FEF3C7;color:#92400E}
+.row{display:flex;gap:9px;align-items:center}
+.row>*{flex:1}
+.small{font-size:12.5px;color:var(--mut);line-height:1.55}
+.center{text-align:center}
+.hidden{display:none!important}
+.lockic{font-size:46px;text-align:center;margin:8px 0 4px}
+.foot{max-width:560px;margin:22px auto 0;padding:0 16px 34px;text-align:center;color:var(--mut);font-size:12px;line-height:1.6}
+.foot a{color:var(--navy2)}
+</style>
+</head>
+<body>
+<div id="app"></div>
+<div class="foot">Security Technology Organizer · Less paperwork. More security.<br><a href="privacy.html">Privacy Policy</a></div>
+
+<script>
+"use strict";
+/* ============================== config ============================== */
+var SB_URL = 'https://qxqrwusaynfqadjfqswe.supabase.co';
+var SB_KEY = 'sb_publishable_2ba9yzEA89uqXHJ6v-_cQg_AmwwEfFF';
+var APP_TAG = 'sto';
+var REG_ROW = 'sto-registry';
+var TRIAL_DAYS = 10;
+var CONTACT = 'Jeremy.levin@loewshotels.com';
+
+/* ============================== state ============================== */
+var S = {
+  reg: null,            // {companies:[...], _ts}
+  me: null,             // company object from registry
+  data: null,           // tenant data {fobs:[], _ts}
+  tab: 'home',
+  fobQuery: ''
+};
+function $(id){ return document.getElementById(id); }
+function esc(s){ return String(s==null?'':s).replace(/[&<>"']/g, function(c){ return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]; }); }
+function uid(p){ return (p||'x') + Date.now().toString(36) + Math.random().toString(36).slice(2,6); }
+function fmtDate(ts){ var d=new Date(ts); return d.toLocaleDateString('en-US',{month:'short',day:'numeric',year:'numeric'}); }
+function daysLeft(){ if(!S.me) return 0; return Math.ceil((S.me.trialEnds - Date.now())/86400000); }
+function trialOver(){ return S.me && S.me.tier==='trial' && Date.now() > S.me.trialEnds; }
+
+/* ============================== supabase ============================== */
+function sbHeaders(extra){ var h = { 'apikey': SB_KEY, 'Authorization': 'Bearer ' + SB_KEY }; if(extra) for(var k in extra) h[k]=extra[k]; return h; }
+async function sbGetRow(rowId){
+  var res = await fetch(SB_URL + '/rest/v1/app_records?id=eq.' + encodeURIComponent(rowId) + '&select=data', { headers: sbHeaders() });
+  if(!res.ok) throw new Error('read failed');
+  var rows = await res.json();
+  return rows.length ? rows[0].data : null;
+}
+async function sbSetRow(rowId, data){
+  data._ts = Date.now();
+  var res = await fetch(SB_URL + '/rest/v1/app_records', { method:'POST',
+    headers: sbHeaders({ 'Content-Type':'application/json', 'Prefer':'resolution=merge-duplicates' }),
+    body: JSON.stringify([{ id: rowId, app: APP_TAG, data: data }]) });
+  if(!res.ok) throw new Error('save failed');
+}
+async function sbDelRow(rowId){
+  await fetch(SB_URL + '/rest/v1/app_records?id=eq.' + encodeURIComponent(rowId), { method:'DELETE', headers: sbHeaders() });
+}
+async function loadRegistry(){
+  var r = await sbGetRow(REG_ROW);
+  S.reg = r || { companies: [] };
+  if(!S.reg.companies) S.reg.companies = [];
+}
+async function saveRegistry(){ await sbSetRow(REG_ROW, S.reg); }
+async function loadTenant(){
+  var d = await sbGetRow(S.me.stateRow);
+  S.data = d || { fobs: [] };
+  if(!S.data.fobs) S.data.fobs = [];
+  try{ localStorage.setItem('stoCache_' + S.me.id, JSON.stringify(S.data)); }catch(e){}
+}
+async function saveTenant(){ await sbSetRow(S.me.stateRow, S.data); try{ localStorage.setItem('stoCache_' + S.me.id, JSON.stringify(S.data)); }catch(e){} }
+
+/* ============================== auth ============================== */
+async function hashPw(pw, salt){
+  var buf = await crypto.subtle.digest('SHA-256', new TextEncoder().encode(salt + '::' + pw));
+  return Array.prototype.map.call(new Uint8Array(buf), function(b){ return ('0'+b.toString(16)).slice(-2); }).join('');
+}
+function sessionSave(){ try{ localStorage.setItem('stoSession', JSON.stringify({ companyId: S.me.id, email: S.me.email })); }catch(e){} }
+function sessionClear(){ try{ localStorage.removeItem('stoSession'); }catch(e){} S.me = null; S.data = null; }
+function findCompany(email){ email = String(email||'').trim().toLowerCase(); for(var i=0;i<S.reg.companies.length;i++){ if(S.reg.companies[i].email === email) return S.reg.companies[i]; } return null; }
+
+async function doSignup(){
+  var co = $('j-co').value.trim(), name = $('j-name').value.trim(),
+      email = $('j-email').value.trim().toLowerCase(), pw = $('j-pw').value;
+  var err = $('j-err');
+  function fail(m){ err.textContent = m; err.style.display = 'block'; }
+  err.style.display = 'none';
+  if(co.length < 2) return fail('Please enter your company name.');
+  if(name.length < 2) return fail('Please enter your name.');
+  if(!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(email)) return fail('Please enter a valid work email.');
+  if(pw.length < 12) return fail('Password must be at least 12 characters.');
+  if(findCompany(email)) return fail('That email already has an account — use Sign in instead.');
+  var salt = uid('s');
+  var company = { id: uid('c'), name: co, adminName: name, email: email,
+    pwHash: await hashPw(pw, salt), salt: salt,
+    createdAt: Date.now(), trialEnds: Date.now() + TRIAL_DAYS*86400000,
+    tier: 'trial', stateRow: '' };
+  company.stateRow = 'sto-co-' + company.id;
+  S.reg.companies.push(company);
+  await saveRegistry();
+  S.me = company;
+  S.data = { fobs: [] };
+  await saveTenant();
+  sessionSave();
+  render();
+}
+async function doLogin(){
+  var email = $('l-email').value.trim().toLowerCase(), pw = $('l-pw').value;
+  var err = $('l-err'); err.style.display = 'none';
+  var c = findCompany(email);
+  if(!c) { err.textContent = 'No account with that email — start a free trial first.'; err.style.display='block'; return; }
+  var h = await hashPw(pw, c.salt);
+  if(h !== c.pwHash) { err.textContent = 'That email and password do not match — try again.'; err.style.display='block'; return; }
+  S.me = c;
+  await loadTenant();
+  sessionSave();
+  render();
+}
+function doLogout(){ sessionClear(); render(); }
+
+/* ============================== views ============================== */
+function render(){
+  var el = $('app');
+  if(!S.me){ el.innerHTML = viewGate(); return; }
+  if(trialOver()){ el.innerHTML = viewLocked(); return; }
+  el.innerHTML = viewShell();
+}
+function viewGate(){
+  return '<div class="hero"><img src="logo.jpg" alt="Security Technology Organizer">'
+    + '<h1>SECURITY TECHNOLOGY <span>ORGANIZER</span></h1>'
+    + '<p>The tracking system for security teams — emergency fobs, radios, cameras,<br>inspections and the yearly audit. One place. No paper.</p></div>'
+    + '<div class="wrap">'
+    + '<div class="card"><h2>Start your free ' + TRIAL_DAYS + '-day trial</h2>'
+    + '<p class="sub">Enter your company name and the Organizer becomes <b>your</b> system — your name on every screen. Basic features included. No card required.</p>'
+    + '<label>Company name</label><input id="j-co" type="text" placeholder="e.g. Harbor Lights Resort" autocomplete="organization">'
+    + '<label>Your name</label><input id="j-name" type="text" placeholder="Your full name" autocomplete="name">'
+    + '<label>Work email</label><input id="j-email" type="email" placeholder="you@company.com" autocomplete="email">'
+    + '<label>Password</label><input id="j-pw" type="password" placeholder="12+ characters" autocomplete="new-password">'
+    + '<div class="err" id="j-err"></div>'
+    + '<button class="btn gold" onclick="doSignup()">Start my trial</button></div>'
+    + '<div class="card"><h2>Already have an account?</h2>'
+    + '<label>Work email</label><input id="l-email" type="email" placeholder="you@company.com" autocomplete="email">'
+    + '<label>Password</label><input id="l-pw" type="password" placeholder="Password" autocomplete="current-password">'
+    + '<div class="err" id="l-err"></div>'
+    + '<button class="btn" onclick="doLogin()">Sign in</button></div>'
+    + '</div>';
+}
+function trialPill(){
+  var d = daysLeft();
+  if(S.me.tier !== 'trial') return '<span class="pill ok">Active plan</span>';
+  if(d > 3) return '<span class="pill">Trial · ' + d + ' days left</span>';
+  if(d >= 0) return '<span class="pill over">Trial · ' + d + ' day' + (d===1?'':'s') + ' left</span>';
+  return '<span class="pill over">Trial ended</span>';
+}
+function viewShell(){
+  var h = '<div class="topbar"><div class="in"><img src="logo.jpg" alt="">'
+    + '<div class="co">' + esc(S.me.name) + '<div class="by">Powered by Security Technology Organizer</div></div>'
+    + trialPill() + '</div></div>'
+    + '<div class="wrap">'
+    + '<div class="tabs">'
+    + '<button class="' + (S.tab==='home'?'on':'') + '" onclick="setTab(\'home\')">Home</button>'
+    + '<button class="' + (S.tab==='fobs'?'on':'') + '" onclick="setTab(\'fobs\')">Fobs</button>'
+    + '<button class="' + (S.tab==='more'?'on':'') + '" onclick="setTab(\'more\')">More</button>'
+    + '</div>';
+  if(S.tab === 'home') h += viewHome();
+  else if(S.tab === 'fobs') h += viewFobs();
+  else h += viewMore();
+  return h + '</div>';
+}
+function setTab(t){ S.tab = t; render(); }
+function modCard(icon, title, sub, tag, live, tab){
+  return '<button class="mod" ' + (live ? 'onclick="setTab(\'' + tab + '\')"' : '') + '>'
+    + '<span class="ic">' + icon + '</span><span><span class="mt">' + title + '</span><div class="ms">' + sub + '</div></span>'
+    + '<span class="tag ' + (live?'live':'') + '">' + tag + '</span></button>';
+}
+function viewHome(){
+  var fobs = S.data.fobs, broken = 0;
+  fobs.forEach(function(f){ if(f.status==='Broken' || f.status==='Not Able to Charge') broken++; });
+  var h = '<div class="card"><h2>' + esc(S.me.name) + '</h2>'
+    + '<p class="sub">Welcome, ' + esc(S.me.adminName.split(' ')[0]) + '. Everything your team tracks lives here — documented, time-stamped, and ready for the yearly audit.</p></div>'
+    + '<div class="tiles">'
+    + '<div class="tile"><div class="n">' + fobs.length + '</div><div class="t">Emergency fobs tracked</div></div>'
+    + '<div class="tile"><div class="n">' + broken + '</div><div class="t">Broken / not charging</div></div></div>'
+    + '<div style="margin-top:16px;font-weight:800;color:var(--navy);font-size:15px">Your modules</div>'
+    + modCard('🆘', 'Emergency Fobs', 'Every fob documented, tested and costed', 'LIVE', true, 'fobs')
+    + modCard('📻', 'Radios', 'The whole fleet, by serial number', 'NEXT PHASE', false)
+    + modCard('📷', 'Cameras', 'Live or down, at a glance', 'NEXT PHASE', false)
+    + modCard('📋', 'Inspections', 'Logged from the field in seconds', 'NEXT PHASE', false)
+    + modCard('🧾', 'Yearly Audit', 'One tap — done', 'NEXT PHASE', false);
+  return h;
+}
+function fobBadge(st){
+  if(st==='Broken' || st==='Not Able to Charge') return '<span class="badge broken">' + esc(st) + '</span>';
+  if(st==='In Use' || st==='Available') return '<span class="badge okb">' + esc(st) + '</span>';
+  return '<span class="badge chg">' + esc(st) + '</span>';
+}
+function viewFobs(){
+  var q = S.fobQuery.toLowerCase();
+  var list = S.data.fobs.filter(function(f){ return !q || (f.fobId + ' ' + f.loc + ' ' + f.status).toLowerCase().indexOf(q) >= 0; });
+  var h = '<div class="card"><h2>Add an emergency fob</h2>'
+    + '<label>Fob ID</label><input id="f-id" type="text" placeholder="Full fob ID">'
+    + '<label>Property / location</label><input id="f-loc" type="text" placeholder="e.g. Tower 1 — Housekeeping">'
+    + '<label>Status</label><select id="f-status">'
+    + ['In Use','Charging','Broken','Not Able to Charge','Available'].map(function(s){ return '<option>' + s + '</option>'; }).join('')
+    + '</select>'
+    + '<div class="err" id="f-err"></div>'
+    + '<button class="btn gold" onclick="addFob()">Add fob</button></div>'
+    + '<div class="card"><h2>Your fobs (' + S.data.fobs.length + ')</h2>'
+    + '<input id="f-q" type="text" placeholder="Search fobs…" value="' + esc(S.fobQuery) + '" oninput="S.fobQuery=this.value;refreshFobList()">'
+    + '<div id="foblist">' + fobListHtml(list) + '</div></div>';
+  return h;
+}
+function fobListHtml(list){
+  if(!list.length) return '<p class="small" style="margin-top:12px">No fobs yet. Add your first one above — it takes ten seconds.</p>';
+  return list.map(function(f){
+    return '<div class="fob"><div class="row"><span class="fid">' + esc(f.fobId) + '</span>' + fobBadge(f.status) + '</div>'
+      + '<div class="fm">' + esc(f.loc || '—') + ' · Added ' + fmtDate(f.createdAt) + '</div>'
+      + '<button class="btn ghost sm" style="margin-top:9px" onclick="delFob(\'' + f.uid + '\')">Remove</button></div>';
+  }).join('');
+}
+function refreshFobList(){
+  var q = S.fobQuery.toLowerCase();
+  var list = S.data.fobs.filter(function(f){ return !q || (f.fobId + ' ' + f.loc + ' ' + f.status).toLowerCase().indexOf(q) >= 0; });
+  var el = $('foblist'); if(el) el.innerHTML = fobListHtml(list);
+  var inp = $('f-q'); if(inp){ inp.focus(); }
+}
+async function addFob(){
+  var id = $('f-id').value.trim(), loc = $('f-loc').value.trim(), st = $('f-status').value;
+  var err = $('f-err'); err.style.display = 'none';
+  if(!id){ err.textContent = 'Enter the fob ID.'; err.style.display = 'block'; return; }
+  S.data.fobs.unshift({ uid: uid('f'), fobId: id, loc: loc, status: st, createdAt: Date.now() });
+  await saveTenant();
+  render();
+}
+async function delFob(u){
+  S.data.fobs = S.data.fobs.filter(function(f){ return f.uid !== u; });
+  await saveTenant();
+  render();
+}
+function viewMore(){
+  var h = '<div class="card"><h2>Company</h2>'
+    + '<p class="sub"><b>' + esc(S.me.name) + '</b><br>Admin: ' + esc(S.me.adminName) + ' · ' + esc(S.me.email) + '<br>'
+    + 'Plan: ' + (S.me.tier==='trial' ? 'Free trial — ends ' + fmtDate(S.me.trialEnds) : esc(S.me.tier)) + '</p>'
+    + '<button class="btn ghost" onclick="doLogout()">Sign out</button></div>'
+    + '<div class="card"><h2>Make it fully yours</h2>'
+    + '<p class="sub">Your company name already appears on every screen. Add your own logo and colors with custom branding — a one-time $500 per company.</p>'
+    + '<a class="btn gold" style="text-align:center;text-decoration:none" href="mailto:' + CONTACT + '?subject=Custom%20branding%20for%20' + encodeURIComponent(S.me.name) + '">Ask about custom branding</a></div>'
+    + '<div class="card"><h2>Privacy</h2>'
+    + '<p class="sub">Your company\u2019s data is stored in its own private workspace — no other company can see it. Read the <a href="privacy.html">Privacy Policy</a>.</p></div>'
+    + '<div class="card"><h2 style="color:var(--red)">Delete account</h2>'
+    + '<p class="sub">Deletes your company account and all of its data, permanently. Type your company name to confirm.</p>'
+    + '<input id="d-co" type="text" placeholder="Type your company name">'
+    + '<div class="err" id="d-err"></div>'
+    + '<button class="btn danger" onclick="doDelete()">Delete my account and data</button></div>';
+  return h;
+}
+async function doDelete(){
+  var v = $('d-co').value.trim(), err = $('d-err'); err.style.display = 'none';
+  if(v !== S.me.name){ err.textContent = 'Type your company name exactly as shown above.'; err.style.display = 'block'; return; }
+  var row = S.me.stateRow, id = S.me.id;
+  await sbDelRow(row);
+  S.reg.companies = S.reg.companies.filter(function(c){ return c.id !== id; });
+  await saveRegistry();
+  try{ localStorage.removeItem('stoCache_' + id); }catch(e){}
+  sessionClear();
+  render();
+}
+function viewLocked(){
+  return '<div class="hero"><img src="logo.jpg" alt="Security Technology Organizer">'
+    + '<h1>SECURITY TECHNOLOGY <span>ORGANIZER</span></h1></div>'
+    + '<div class="wrap"><div class="card"><div class="lockic">🔒</div>'
+    + '<h2 class="center">Your free trial has ended</h2>'
+    + '<p class="sub center">' + esc(S.me.name) + '\u2019s trial wrapped up on ' + fmtDate(S.me.trialEnds) + '. Your data is safe and exactly where you left it — subscribe and pick right back up.</p>'
+    + '<a class="btn gold" style="text-align:center;text-decoration:none" href="mailto:' + CONTACT + '?subject=Subscribe%20—%20' + encodeURIComponent(S.me.name) + '">Subscribe — $199/property/month</a>'
+    + '<button class="btn ghost" onclick="doLogout()">Sign out</button>'
+    + '<p class="small center" style="margin-top:12px">Full suite $199/property/month · Single module $100/month · Annual $1,990</p></div></div>';
+}
+
+/* ============================== boot ============================== */
+(async function boot(){
+  $('app').innerHTML = '<div class="wrap"><div class="card center"><p class="sub">Loading…</p></div></div>';
+  try{
+    await loadRegistry();
+    var sess = null;
+    try{ sess = JSON.parse(localStorage.getItem('stoSession') || 'null'); }catch(e){}
+    if(sess && sess.companyId){
+      for(var i=0;i<S.reg.companies.length;i++) if(S.reg.companies[i].id === sess.companyId) S.me = S.reg.companies[i];
+      if(S.me && !trialOver()) await loadTenant();
+      if(!S.me) sessionClear();
+    }
+  }catch(e){ /* offline or first run: gate still renders */ }
+  render();
+})();
+</script>
+</body>
+</html>
